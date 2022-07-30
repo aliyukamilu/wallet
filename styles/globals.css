@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: Now;
+    src: url('../fonts/now/Now-Regular.otf');
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #130040;
+    color: #fff;
+    font-family: Now;
+    max-width: auto;
+}
+
+.bg-gradient {
+    background: linear-gradient(to right, #604EDE, #A851D8);
+}
+
+.bg-gradient2 {
+    background: linear-gradient(to right, #A851D8, #604EDE);
+}

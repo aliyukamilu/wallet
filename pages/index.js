@@ -2,13 +2,21 @@ import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import Accounts from 'web3-eth-accounts';
 
+import { FaEthereum } from 'react-icons/fa'
+import { FiCopy } from 'react-icons/fi'
+
 import Loader from '../components/Loader';
+import Tooltip from '../components/Tooltip'
+import { shortenAddress } from '../utils/shortenAddress'
+
+const tdd = 'text-sm text-[white] font-light px-6 py-4 whitespace-nowrap'
 
 const Home = () => {
 
   const [balance, setBalance] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const testnet = "https://rinkeby.infura.io/v3/f3b0a7c03b7e47289cc277ed0d60579d"
   var web3 = new Web3(testnet);
@@ -42,7 +50,6 @@ const Home = () => {
 
 
 
-  // Create transaction
   const deploy = async () => {
     setIsLoading(true)
     console.log(
@@ -66,6 +73,7 @@ const Home = () => {
     setUpBalance()
     setIsLoading(false)
     setSuccess(true)
+    console.log(createReceipt);
     console.log(
       `Transaction successful with hash: https://rinkeby.etherscan.io/tx/${createReceipt.transactionHash}`
     );
@@ -75,21 +83,87 @@ const Home = () => {
     deploy();
   }
 
+  function coptToClip() {
+    navigator.clipboard.writeText(walletAddress)
+    setShowTooltip(true)
+    setTimeout(() => {
+      setShowTooltip(false)
+    }, 1000)
+  }
+
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <div className="flex min-h-screen flex-col p-2">
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <p>{walletAddress} </p>
-        <p>{balance} ETH</p>
+
+      <section className='bg-gradient max-w-auto rounded-xl p-5'>
+        <div className='flex flex-row justify-between items-center'>
+
+          <div className='profile flex flex-row items-center'>
+            <img src='/profile.png' alt='profile' className='rounded-full h-12 w-12' />
+            <p className='text-sm -mb-2'>Hello, John</p>
+          </div>
+
+          <div>
+            <FaEthereum className='text-lg' />
+          </div>
+        </div>
+
+        <div className='addressBal mt-5'>
+          <div>
+            <p className='text-xs text-[#cbaef7]'>Wallet Address</p>
+            <div className='flex justify-between items-center'>
+              <p className='text-xs font-bold'>{walletAddress}</p>
+              <FiCopy onClick={coptToClip} />
+            </div>
+
+          </div>
+          <div className='mt-3'>
+            <p className='text-xs text-[#cbaef7]'>Wallet Balance</p>
+            <p className='text-2xl font-bold'>{balance} ETH <span className='text-sm text-[#cbaef7] font-bold'>120 USD</span></p>
+
+          </div>
+        </div>
+
+      </section>
+
+
+      <section className='mt-5 flex flex-col justify-center'>
+
         {isLoading
           ? <Loader />
           : (
-            <button type="button" style={{display: isSuccess ? 'none' : 'block',}} className="btnEth" onClick={sendEth}>Send 0.002 Eth </button>
+            <button type="button"
+              style={{ display: isSuccess ? 'none' : 'block', }}
+              className="bg-gradient2 rounded-lg px-8 py-5"
+              onClick={sendEth}>Make Payment</button>
           )}
-        {isSuccess && <p className='text-[green]'>Success!</p>}
-      </main>
+        {!isSuccess && (
+          <div className='mt-5'>
+            <p className='text-[green] text-center'>Payment successful!</p>
 
+            <h2 className='text-center mt-5 font-bold text-2xl'>Transaction Details</h2>
+            <div className='d-flex justify-center mt-3'>
+              <table className='min-w-full'>
+                <tr className='border-b'>
+                  <td className={tdd}>AddressTo :</td>
+                  <td className={tdd}>{shortenAddress(addressTo)}</td>
+                </tr>
+                <tr className='border-b'>
+                  <td className={tdd}>AddressFrom :</td>
+                  <td className={tdd}>{shortenAddress(walletAddress)}</td>
+                </tr>
+                <tr className='border-b'>
+                  <td className={tdd}>Amount Sent :</td>
+                  <td className={tdd}>0.003</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {showTooltip && <Tooltip />}
+      </section>
     </div>
   )
 }
