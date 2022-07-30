@@ -138,7 +138,7 @@ const Home = () => {
               className="bg-gradient2 rounded-lg px-8 py-5"
               onClick={sendEth}>Make Payment</button>
           )}
-        {!isSuccess && (
+        {isSuccess && (
           <div className='mt-5'>
             <p className='text-[green] text-center'>Payment successful!</p>
 
