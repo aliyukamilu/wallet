@@ -19,7 +19,7 @@ const Home: NextPage = () => {
   const privKey = '609cf9dd85af6380b683166c6d6448b79be6b36c25006f73f4a9c74688bdf676';
   const addressTo = '0x52EdB5dFCE4640644AD366b660ee9b78872b16c3'
 
-  if (typeof web3 !== 'undefined') {
+  if (typeof web3 !== 'undefined ') {
     web3 = new Web3(web3.currentProvider);
   } else {
     web3 = new Web3(new Web3.providers.HttpProvider(testnet));
