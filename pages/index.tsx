@@ -32,7 +32,7 @@ const Home: NextPage = () => {
         console.log(err)
       } else {
         let theBalance = parseFloat(web3.utils.fromWei(result, 'ether')).toFixed(4);
-        setBalance(theBalance + " ETH")
+        setBalance(theBalance)
       }
     })
   }
@@ -81,8 +81,8 @@ const Home: NextPage = () => {
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
 
       <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <p>{walletAddress}</p>
-        <p>{balance}</p>
+        <p>{walletAddress} </p>
+        <p>{balance} ETH</p>
         {isLoading
           ? <Loader />
           : (
