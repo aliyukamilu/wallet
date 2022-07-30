@@ -1,11 +1,10 @@
-import type { NextPage } from 'next'
 import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import Accounts from 'web3-eth-accounts';
 
 import Loader from '../components/Loader';
 
-const Home: NextPage = () => {
+const Home = () => {
 
   const [balance, setBalance] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
