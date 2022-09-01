@@ -14,6 +14,7 @@ const tdd = 'text-sm text-[white] font-light px-6 py-4 whitespace-nowrap'
 const Home = () => {
 
   const [balance, setBalance] = useState(0);
+  const [dollarBalance, setDollarBalance] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -39,7 +40,10 @@ const Home = () => {
         console.log(err)
       } else {
         let theBalance = parseFloat(web3.utils.fromWei(result, 'ether')).toFixed(4);
+        let dollarBals = theBalance * 1580.56
         setBalance(theBalance)
+        setDollarBalance(dollarBals.toFixed(2))
+
       }
     })
   }
@@ -60,7 +64,7 @@ const Home = () => {
       {
         from: walletAddress,
         to: addressTo,
-        value: web3.utils.toWei('0.0005', 'ether'),
+        value: web3.utils.toWei('0.05', 'ether'),
         gas: '21000',
       },
       privKey
@@ -91,6 +95,17 @@ const Home = () => {
     }, 1000)
   }
 
+  const Input = ({ placeholder, name, type, value, handleChange }) => (
+    <input
+      placeholder={placeholder}
+      type={type}
+      step="0.0001"
+      value={value}
+      // onChange={(e) => handleChange(e, name)}
+      style={{borderColor: 'linear-gradient(to right, #604EDE, #A851D8);'}}
+      className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-b-2 text-sm white-glassmorphism"
+    />
+  );
 
   return (
     <div className="flex min-h-screen flex-col p-2">
@@ -101,7 +116,7 @@ const Home = () => {
 
           <div className='profile flex flex-row items-center'>
             <img src='/profile.png' alt='profile' className='rounded-full h-12 w-12' />
-            <p className='text-sm -mb-2'>Hello, John</p>
+            <p className='text-sm -mb-2'>Hello, Broski</p>
           </div>
 
           <div>
@@ -113,14 +128,14 @@ const Home = () => {
           <div>
             <p className='text-xs text-[#cbaef7]'>Wallet Address</p>
             <div className='flex justify-between items-center'>
-              <p className='text-xs font-bold'>{walletAddress}</p>
+              <p className='text-xs font-bold'>{shortenAddress(walletAddress)}</p>
               <FiCopy onClick={coptToClip} />
             </div>
 
           </div>
           <div className='mt-3'>
             <p className='text-xs text-[#cbaef7]'>Wallet Balance</p>
-            <p className='text-2xl font-bold'>{balance} ETH <span className='text-sm text-[#cbaef7] font-bold'>120 USD</span></p>
+            <p className='text-2xl font-bold'>{balance} ETH <span className='text-sm text-[#cbaef7] font-bold'>{dollarBalance} USD</span></p>
 
           </div>
         </div>
@@ -129,7 +144,9 @@ const Home = () => {
 
 
       <section className='mt-5 flex flex-col justify-center'>
-
+        <Input placeholder="Address To" name="addressTo" type="text" />
+        <Input placeholder="Amount (ETH)" name="amount" type="number" />
+        <div className='mb-10'></div>
         {isLoading
           ? <Loader />
           : (
@@ -155,7 +172,7 @@ const Home = () => {
                 </tr>
                 <tr className='border-b'>
                   <td className={tdd}>Amount Sent :</td>
-                  <td className={tdd}>0.003</td>
+                  <td className={tdd}>0.05</td>
                 </tr>
               </table>
             </div>
