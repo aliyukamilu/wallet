@@ -102,8 +102,8 @@ const Home = () => {
       step="0.0001"
       value={value}
       // onChange={(e) => handleChange(e, name)}
-      style={{borderColor: 'linear-gradient(to right, #604EDE, #A851D8);'}}
-      className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-b-2 text-sm white-glassmorphism"
+      style={{ borderBottom: '2px solid #604EDE' }}
+      className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white text-sm "
     />
   );
 
@@ -133,7 +133,7 @@ const Home = () => {
             </div>
 
           </div>
-          <div className='mt-3'>
+          <div className='mt-10'>
             <p className='text-xs text-[#cbaef7]'>Wallet Balance</p>
             <p className='text-2xl font-bold'>{balance} ETH <span className='text-sm text-[#cbaef7] font-bold'>{dollarBalance} USD</span></p>
 
@@ -144,8 +144,10 @@ const Home = () => {
 
 
       <section className='mt-5 flex flex-col justify-center'>
-        <Input placeholder="Address To" name="addressTo" type="text" />
-        <Input placeholder="Amount (ETH)" name="amount" type="number" />
+        <div className='py-5 mt-5 px-3 blue-glassmorphism'>
+          <Input placeholder="Address To" name="addressTo" type="text" />
+          <Input placeholder="Amount (ETH)" name="amount" type="number" />
+        </div>
         <div className='mb-10'></div>
         {isLoading
           ? <Loader />
