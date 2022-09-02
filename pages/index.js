@@ -171,7 +171,7 @@ const Home = () => {
             <button type="button"
               style={{ display: isSuccess ? 'none' : 'block', }}
               className="bg-gradient2 rounded-lg px-8 py-5"
-              onClick={sendEth}>Make Payment</button>
+              onClick={sendEth}>Send Eth</button>
           )}
         {isSuccess && (
           <div className='mt-5'>
