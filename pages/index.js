@@ -18,6 +18,15 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [addressToSend, setaddressTo] = useState(null);
+  const [amount, setamount] = useState(null)
+
+  const setAddressTo = (val) => {
+    setaddressTo(val.target.value);
+  }
+  const setAmount = (val) => {
+    setamount(val.target.value);
+  }
 
   const testnet = "https://rinkeby.infura.io/v3/f3b0a7c03b7e47289cc277ed0d60579d"
   var web3 = new Web3(testnet);
@@ -26,7 +35,7 @@ const Home = () => {
 
   const walletAddress = '0xc25e27911b334C6B854cC66DE4d7276A80881288';
   const privKey = '609cf9dd85af6380b683166c6d6448b79be6b36c25006f73f4a9c74688bdf676';
-  const addressTo = '0x52EdB5dFCE4640644AD366b660ee9b78872b16c3'
+  // const addressTo = '0x52EdB5dFCE4640644AD366b660ee9b78872b16c3'
 
   if (typeof web3 !== 'undefined') {
     web3 = new Web3(web3.currentProvider);
@@ -55,32 +64,37 @@ const Home = () => {
 
 
   const deploy = async () => {
-    setIsLoading(true)
-    console.log(
-      `Attempting to make transaction from ${walletAddress} to ${addressTo}`
-    );
+    if (amount > 0.05) {
+      alert(`Can't send more than 0.05 eth ole 😒🙂`)
+    } else {
+      setIsLoading(true)
+      // console.log(
+      //   `Attempting to make transaction from ${walletAddress} to ${addressToSend}`
+      // );
+      // console.log(addressToSend, amount)
+      const createTransaction = await web3.eth.accounts.signTransaction(
+        {
+          from: walletAddress,
+          to: addressToSend,
+          value: web3.utils.toWei(amount, 'ether'),
+          gas: '21000',
+        },
+        privKey
+      );
 
-    const createTransaction = await web3.eth.accounts.signTransaction(
-      {
-        from: walletAddress,
-        to: addressTo,
-        value: web3.utils.toWei('0.05', 'ether'),
-        gas: '21000',
-      },
-      privKey
-    );
+      // Deploy transaction
+      const createReceipt = await web3.eth.sendSignedTransaction(
+        createTransaction.rawTransaction
+      );
+      setUpBalance()
+      setIsLoading(false)
+      setSuccess(true)
+      // console.log(createReceipt);
+      // console.log(
+      //   `Transaction successful with hash: https://rinkeby.etherscan.io/tx/${createReceipt.transactionHash}`
+      // );
+    }
 
-    // Deploy transaction
-    const createReceipt = await web3.eth.sendSignedTransaction(
-      createTransaction.rawTransaction
-    );
-    setUpBalance()
-    setIsLoading(false)
-    setSuccess(true)
-    console.log(createReceipt);
-    console.log(
-      `Transaction successful with hash: https://rinkeby.etherscan.io/tx/${createReceipt.transactionHash}`
-    );
   }
 
   function sendEth() {
@@ -94,18 +108,6 @@ const Home = () => {
       setShowTooltip(false)
     }, 1000)
   }
-
-  const Input = ({ placeholder, name, type, value, handleChange }) => (
-    <input
-      placeholder={placeholder}
-      type={type}
-      step="0.0001"
-      value={value}
-      // onChange={(e) => handleChange(e, name)}
-      style={{ borderBottom: '2px solid #604EDE' }}
-      className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white text-sm "
-    />
-  );
 
   return (
     <div className="flex min-h-screen flex-col p-2">
@@ -145,8 +147,22 @@ const Home = () => {
 
       <section className='mt-5 flex flex-col justify-center'>
         <div className='py-5 mt-5 px-3 blue-glassmorphism'>
-          <Input placeholder="Address To" value="0x52EdB5dFCE4640644AD366b660ee9b78872b16c3" name="addressTo" type="text" />
-          <Input placeholder="Amount (ETH)" value="0.05" name="amount" type="number" />
+          <input
+            placeholder="Address To"
+            type="text"
+            step="0.0001"
+            onChange={setAddressTo}
+            style={{ borderBottom: '2px solid #604EDE' }}
+            className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white text-sm "
+          />
+          <input
+            placeholder="Amount (ETH)"
+            type="number"
+            step="0.0001"
+            onChange={setAmount}
+            style={{ borderBottom: '2px solid #604EDE' }}
+            className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white text-sm "
+          />
         </div>
         <div className='mb-10'></div>
         {isLoading
@@ -166,7 +182,7 @@ const Home = () => {
               <table className='min-w-full'>
                 <tr className='border-b'>
                   <td className={tdd}>AddressTo :</td>
-                  <td className={tdd}>{shortenAddress(addressTo)}</td>
+                  <td className={tdd}>{shortenAddress(addressToSend)}</td>
                 </tr>
                 <tr className='border-b'>
                   <td className={tdd}>AddressFrom :</td>
@@ -174,13 +190,12 @@ const Home = () => {
                 </tr>
                 <tr className='border-b'>
                   <td className={tdd}>Amount Sent :</td>
-                  <td className={tdd}>0.05</td>
+                  <td className={tdd}>{amount}</td>
                 </tr>
               </table>
             </div>
           </div>
         )}
-
         {showTooltip && <Tooltip />}
       </section>
     </div>
