@@ -118,7 +118,7 @@ const Home = () => {
 
           <div className='profile flex flex-row items-center'>
             <img src='/profile.png' alt='profile' className='rounded-full h-12 w-12' />
-            <p className='text-sm -mb-2'>Hello, Broski</p>
+            <p className='text-sm -mb-2'>Hello, John</p>
           </div>
 
           <div>
