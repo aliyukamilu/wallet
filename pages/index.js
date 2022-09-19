@@ -65,7 +65,7 @@ const Home = () => {
 
   const deploy = async () => {
     if (amount > 0.05) {
-      alert(`Can't send more than 0.05 eth ole 😒🙂`)
+      alert(`Can't send more than 0.05 eth 🙂`)
     } else {
       setIsLoading(true)
       // console.log(
